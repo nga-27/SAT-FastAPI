@@ -1,4 +1,5 @@
 from typing import Optional
+import uuid
 
 from pydantic import BaseModel
 
@@ -14,3 +15,11 @@ class ToolConfig(BaseModel):
     period: Optional[int] = None
     weight: Optional[float] = 2.0
     subFilter: Optional[str] = "simple"
+
+
+class User(BaseModel):
+    username: str
+    name: Optional[str] = ""
+    uuid: Optional[str] = str(uuid.uuid4())
+    password_hash: Optional[str] = ""
+    vq_key: Optional[str] = ""

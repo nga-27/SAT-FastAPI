@@ -9,7 +9,6 @@ from .classes import Ticker
 
 
 def download_data(ticker: Ticker):
-
     if ticker.ticker.upper() in main.DB:
         content = main.DB[ticker.ticker.upper()]
         if content.get('date') is not None:

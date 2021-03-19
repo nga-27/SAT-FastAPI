@@ -3,6 +3,10 @@ tags_metadata = [
         "name": "Health"
     },
     {
+        "name": "Users",
+        "description": "Advanced features for storing user-specific keys and settings."
+    },
+    {
         "name": "Basic Ticker",
         "description": "Basic ticker items, such as 'Open', 'Close', 'High', 'Low', and loading a ticker into the DB."
     },

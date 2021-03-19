@@ -4,11 +4,12 @@ import json
 from fastapi import FastAPI
 
 from app.routers import tickers, tools
-
+from app.users import users
 from app.dependencies import metadata_tags
 
 DB_DIR = os.path.join("app", "db")
 DB_PATH = os.path.join(DB_DIR, "db.json")
+USER_PATH = os.path.join(DB_DIR, "user.json")
 
 app = FastAPI(
     title="SecuritiesAnalysisTools API",
@@ -19,6 +20,7 @@ app = FastAPI(
 
 app.include_router(tickers.router)
 app.include_router(tools.router)
+app.include_router(users.router)
 
 
 def init_db():
@@ -34,7 +36,21 @@ def init_db():
     return db
 
 
+def init_user():
+    if not os.path.exists(DB_DIR):
+        os.mkdir(DB_DIR)
+    if not os.path.exists(USER_PATH):
+        return {}
+
+    with open(USER_PATH, 'r') as usf:
+        user = json.load(usf)
+        usf.close()
+
+    return user
+
+
 DB = init_db()
+USER = init_user()
 
 
 @app.get("/", tags=["Health"])
