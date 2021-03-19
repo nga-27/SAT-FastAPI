@@ -1,9 +1,15 @@
+import os
+import json
+
 from fastapi import FastAPI
 
 from app.libs.test_math import add_numbers
 from app.routers import tools
 
 from app.dependencies import metadata_tags
+
+DB_DIR = os.path.join("app", "db")
+DB_PATH = os.path.join(DB_DIR, "db.json")
 
 app = FastAPI(
     title="SecuritiesAnalysisTools API",
@@ -13,6 +19,22 @@ app = FastAPI(
 )
 
 app.include_router(tools.router)
+
+
+def init_db():
+    if not os.path.exists(DB_DIR):
+        os.mkdir(DB_DIR)
+    if not os.path.exists(DB_PATH):
+        return {}
+
+    with open(DB_PATH, 'r') as dbf:
+        db = json.load(dbf)
+        dbf.close()
+
+    return db
+
+
+DB = init_db()
 
 
 @app.get("/")

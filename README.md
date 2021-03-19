@@ -1,4 +1,4 @@
 # SAT-FastAPI
 Securities Analysis Tools but with FastAPI server - to learn!
 
-Big step!
+Run `uvicorn app.main:app --reload`
