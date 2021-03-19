@@ -22,8 +22,9 @@ def download_data(ticker: Ticker):
     pddata = yf.download(tickers=ticker.ticker,
                          period=ticker.period, interval=ticker.interval)
     data = {x: list(pddata[x]) for x in pddata.columns}
+    data['dates'] = [x.strftime("%Y-%m-%d") for x in pddata.index]
     main.DB[ticker.ticker] = {
-        "data": data, "date": datetime.datetime.now().strftime("%Y%m%d")}
+        "ochl": data, "date": datetime.datetime.now().strftime("%Y%m%d")}
     update_db(main.DB)
     return data
 
@@ -32,4 +33,10 @@ def update_db(db_obj):
     with open(main.DB_PATH, 'w') as dbf:
         json.dump(db_obj, dbf)
         dbf.close()
+    return
+
+
+def patch_db(ticker: Ticker, new_key: str, new_data):
+    main.DB[ticker.ticker][new_key] = new_data
+    update_db(main.DB)
     return

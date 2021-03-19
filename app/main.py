@@ -3,8 +3,7 @@ import json
 
 from fastapi import FastAPI
 
-from app.libs.test_math import add_numbers
-from app.routers import tools
+from app.routers import tickers, tools
 
 from app.dependencies import metadata_tags
 
@@ -18,6 +17,7 @@ app = FastAPI(
     openapi_tags=metadata_tags.tags_metadata
 )
 
+app.include_router(tickers.router)
 app.include_router(tools.router)
 
 
@@ -37,17 +37,11 @@ def init_db():
 DB = init_db()
 
 
-@app.get("/")
+@app.get("/", tags=["Health"])
 def check_heartbeat():
     return {"hello there": "from SAT-FastAPI"}
 
 
-@app.get("/{ticker}")
+@app.get("/{ticker}", tags=["Health"])
 def echo_ticker(ticker: str):
     return {"ticker": ticker}
-
-
-@app.post("/add_values/{a}/{b}")
-def echo_add(a: int, b: int):
-    value = add_numbers(a, b)
-    return {"value": value}
