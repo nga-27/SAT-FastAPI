@@ -3,16 +3,16 @@ import json
 from fastapi import APIRouter
 
 from app.libs.utils.classes import Ticker
-from app.libs.utils.data_download import download_data
+from app.libs.utils.db_utils import download_data
 
 router = APIRouter(
     prefix="/tickers"
 )
 
 
-@router.get("/", tags=["Basic Ticker"])
-def echo_tools():
-    return {"tools": "hello there"}
+@router.get("/{ticker}", tags=["Basic Ticker"])
+def echo_ticker(ticker: str):
+    return {"ticker": ticker.upper()}
 
 
 @router.post("/ochl", tags=["Basic Ticker"])

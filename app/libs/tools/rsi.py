@@ -1,7 +1,7 @@
 import numpy as np
 
 from app.libs.utils.classes import Ticker
-from app.libs.utils.data_download import download_data, patch_db
+from app.libs.utils.db_utils import download_data, patch_db
 
 
 def generate_rsi_signal(ticker: str, **kwargs) -> list:
@@ -20,12 +20,16 @@ def generate_rsi_signal(ticker: str, **kwargs) -> list:
     period = kwargs.get('period', 14)
     p_bar = kwargs.get('p_bar')
 
+    if period is None:
+        period = 14
     ticker = Ticker(ticker=ticker)
 
     position = download_data(ticker)
     if 'rsi' in position:
-        print(f"'RSI' already in DB for {ticker.ticker}, passing queued data.")
-        return position['rsi']
+        if not isinstance(position['rsi'], list) and period == position['rsi'].get('period', 0):
+            print(
+                f"'RSI' already in DB for {ticker.ticker}, passing queued data.")
+            return position['rsi']
 
     position = position['ochl']
 
@@ -83,6 +87,7 @@ def generate_rsi_signal(ticker: str, **kwargs) -> list:
         rsi = 100.0 - (100.0 / (1.0 + RS[i][2]))
         RSI.append(np.round(rsi, 6))
 
-    patch_db(ticker, 'rsi', RSI)
+    payload = {'period': period, 'signal': RSI}
+    patch_db(ticker, 'rsi', payload)
 
-    return RSI
+    return payload

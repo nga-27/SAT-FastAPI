@@ -40,8 +40,3 @@ DB = init_db()
 @app.get("/", tags=["Health"])
 def check_heartbeat():
     return {"hello there": "from SAT-FastAPI"}
-
-
-@app.get("/{ticker}", tags=["Health"])
-def echo_ticker(ticker: str):
-    return {"ticker": ticker}
