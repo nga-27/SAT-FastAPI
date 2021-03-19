@@ -14,7 +14,7 @@ USER_PATH = os.path.join(DB_DIR, "user.json")
 app = FastAPI(
     title="SecuritiesAnalysisTools API",
     description="The FastAPI version of SecuritiesAnalysisTools repo.",
-    version="0.0.1",
+    version="0.0.2",
     openapi_tags=metadata_tags.tags_metadata
 )
 

@@ -10,7 +10,10 @@ from app.libs.tools.moving_average import (
 
 
 LIST_OF_TOOLS = [
-    "RSI"
+    "rsi",
+    "simple_moving_average",
+    "exponential_moving_average",
+    "windowed_moving_average"
 ]
 
 router = APIRouter(
