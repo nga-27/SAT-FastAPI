@@ -21,5 +21,9 @@ tags_metadata = [
     {
         "name": "Moving Averages",
         "description": "Types of available moving averages."
+    },
+    {
+        "name": "On Balance Volume",
+        "description": "Volume and price action over time."
     }
 ]

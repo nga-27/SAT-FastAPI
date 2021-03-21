@@ -1,6 +1,6 @@
 import numpy as np
 
-from app.libs.utils.db_utils import patch_db, download_data
+from app.libs.utils.db_utils import patch_db, download_data, is_already_valid_data
 from app.libs.utils.classes import Ticker
 
 
@@ -25,13 +25,9 @@ def simple_moving_avg(ticker: str, **kwargs) -> list:
     ticker = Ticker(ticker=ticker)
 
     position = download_data(ticker)
-    if 'simple_moving_average' in position:
-        if not isinstance(position['simple_moving_average'], list) and period == position['simple_moving_average'].get('period', 0):
-            print(
-                f"'Simple Moving Average' already in DB for {ticker.ticker}, passing queued data.")
-            return position['simple_moving_average']
+    if is_already_valid_data(ticker, position, 'simple_moving_average', period=period):
+        return position['simple_moving_average']
 
-    print(position.keys())
     position = position['ochl']
     interval = period
 
@@ -71,11 +67,8 @@ def exponential_moving_avg(ticker: str, **kwargs) -> list:
     ticker = Ticker(ticker=ticker)
 
     position = download_data(ticker)
-    if 'exponential_moving_average' in position:
-        if not isinstance(position['exponential_moving_average'], list) and period == position['exponential_moving_average'].get('period', 0):
-            print(
-                f"'Exponential Moving Average' already in DB for {ticker.ticker}, passing queued data.")
-            return position['simple_moving_average']
+    if is_already_valid_data(ticker, position, 'exponential_moving_average', period=period):
+        return position['exponential_moving_average']
 
     position = position['ochl']
     interval = period
@@ -123,14 +116,9 @@ def windowed_moving_avg(ticker: str, **kwargs) -> list:
     weight_strength = kwargs.get('weight_strength', 2.0)
 
     position = download_data(ticker)
-    if 'windowed_moving_average' in position:
-        if not isinstance(position['windowed_moving_average'], list) and \
-                period == position['windowed_moving_average'].get('period', 0) and \
-                filter_type == position['windowed_moving_average'].get('subFilter', "simple") and \
-                weight_strength == position['windowed_moving_average'].get('weight_strength', 2.0):
-            print(
-                f"'Windowed Moving Average' already in DB for {ticker.ticker}, passing queued data.")
-            return position['windowed_moving_average']
+    if is_already_valid_data(ticker, position, 'windowed_moving_average',
+                             period=period, filter_type=filter_type, weight_strength=weight_strength):
+        return position['windowed_moving_average']
 
     position = position['ochl']
     interval = period

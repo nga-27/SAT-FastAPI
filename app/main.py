@@ -3,10 +3,12 @@ import json
 
 from fastapi import FastAPI
 
-from app.routers import tickers, tool
-from app.routers.tools import moving_average
-from app.users import users
 from app.dependencies import metadata_tags
+from app.routers import tickers, tool
+from app.users import users
+
+from app.routers.tools import moving_average
+from app.routers.tools import on_balance_volume
 
 DB_DIR = os.path.join("app", "db")
 DB_PATH = os.path.join(DB_DIR, "db.json")
@@ -22,7 +24,9 @@ app = FastAPI(
 app.include_router(tickers.router)
 app.include_router(tool.router)
 app.include_router(users.router)
+
 app.include_router(moving_average.router)
+app.include_router(on_balance_volume.router)
 
 
 def init_db():
