@@ -47,6 +47,8 @@ def is_already_valid_data(ticker: Ticker, position: dict, key: str, **kwargs) ->
     period = kwargs.get('period')
     filter_type = kwargs.get('filter_type')
     weight_strength = kwargs.get('weight_strength')
+    config = kwargs.get('config')
+
     special_case = all([period, filter_type, weight_strength])
 
     if key in position:
@@ -55,6 +57,11 @@ def is_already_valid_data(ticker: Ticker, position: dict, key: str, **kwargs) ->
                     period == position[key].get('period', 0) and \
                     filter_type == position[key].get('subFilter', "simple") and \
                     weight_strength == position[key].get('weight_strength', 2.0):
+                print(
+                    f"'{key}' already in DB for {ticker.ticker}, passing queued data.")
+                return True
+        elif config is not None:
+            if not isinstance(position[key], list) and config == position[key].get('config', []):
                 print(
                     f"'{key}' already in DB for {ticker.ticker}, passing queued data.")
                 return True

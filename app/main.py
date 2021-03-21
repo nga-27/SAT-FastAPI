@@ -9,6 +9,7 @@ from app.users import users
 
 from app.routers.tools import moving_average
 from app.routers.tools import on_balance_volume
+from app.routers.tools import oscillators
 
 DB_DIR = os.path.join("app", "db")
 DB_PATH = os.path.join(DB_DIR, "db.json")
@@ -27,6 +28,7 @@ app.include_router(users.router)
 
 app.include_router(moving_average.router)
 app.include_router(on_balance_volume.router)
+app.include_router(oscillators.router)
 
 
 def init_db():

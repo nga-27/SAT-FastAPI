@@ -1,6 +1,5 @@
 from fastapi import APIRouter
 
-from app.libs.utils.classes import ToolConfig
 from app.libs.utils.responses import response_handler
 
 from app.libs.tools.on_balance_volume import generate_obv_signal
