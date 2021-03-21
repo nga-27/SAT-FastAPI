@@ -27,7 +27,7 @@ def download_data(ticker: Ticker):
     main.DB[ticker.ticker.upper()] = {
         "ochl": data, "date": datetime.datetime.now().strftime("%Y%m%d")}
     update_db(main.DB)
-    return main.DB
+    return main.DB[ticker.ticker.upper()]
 
 
 def update_db(db_obj):

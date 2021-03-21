@@ -3,7 +3,8 @@ import json
 
 from fastapi import FastAPI
 
-from app.routers import tickers, tools
+from app.routers import tickers, tool
+from app.routers.tools import moving_average
 from app.users import users
 from app.dependencies import metadata_tags
 
@@ -19,8 +20,9 @@ app = FastAPI(
 )
 
 app.include_router(tickers.router)
-app.include_router(tools.router)
+app.include_router(tool.router)
 app.include_router(users.router)
+app.include_router(moving_average.router)
 
 
 def init_db():

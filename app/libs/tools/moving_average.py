@@ -31,6 +31,7 @@ def simple_moving_avg(ticker: str, **kwargs) -> list:
                 f"'Simple Moving Average' already in DB for {ticker.ticker}, passing queued data.")
             return position['simple_moving_average']
 
+    print(position.keys())
     position = position['ochl']
     interval = period
 
