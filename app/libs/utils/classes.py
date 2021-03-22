@@ -17,6 +17,11 @@ class ToolConfig(BaseModel):
     subFilter: Optional[str] = "simple"
 
 
+class OscillatorConfig(BaseModel):
+    ticker: str
+    period_list: Optional[list] = [7, 14, 28]
+
+
 class User(BaseModel):
     username: str
     name: Optional[str] = ""
