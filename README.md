@@ -10,5 +10,5 @@ Securities Analysis Tools but with FastAPI server - to learn!
 READY!
 
 # Version Releases
-`0.0.1`, 03-18-2021: First set of APIs + structure; RSI + moving averages + "DB"
-`0.0.2`, 03-21-2021: Actual SAT functions; "Users"; Slightly different route structure
+* `0.0.1`, 03-18-2021: First set of APIs + structure; RSI + moving averages + "DB"
+* `0.0.2`, 03-21-2021: Actual SAT functions; "Users"; Slightly different route structure
