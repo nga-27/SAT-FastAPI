@@ -9,7 +9,6 @@ from .classes import Ticker
 
 
 def download_data(ticker: Ticker):
-
     if ticker.ticker.upper() in main.DB:
         content = main.DB[ticker.ticker.upper()]
         if content.get('date') is not None:
@@ -28,7 +27,7 @@ def download_data(ticker: Ticker):
     main.DB[ticker.ticker.upper()] = {
         "ochl": data, "date": datetime.datetime.now().strftime("%Y%m%d")}
     update_db(main.DB)
-    return main.DB
+    return main.DB[ticker.ticker.upper()]
 
 
 def update_db(db_obj):
@@ -42,3 +41,38 @@ def patch_db(ticker: Ticker, new_key: str, new_data):
     main.DB[ticker.ticker.upper()][new_key] = new_data
     update_db(main.DB)
     return
+
+
+def is_already_valid_data(ticker: Ticker, position: dict, key: str, **kwargs) -> bool:
+    period = kwargs.get('period')
+    filter_type = kwargs.get('filter_type')
+    weight_strength = kwargs.get('weight_strength')
+    config = kwargs.get('config')
+
+    special_case = all([period, filter_type, weight_strength])
+
+    if key in position:
+        if special_case:
+            if not isinstance(position[key], list) and \
+                    period == position[key].get('period', 0) and \
+                    filter_type == position[key].get('subFilter', "simple") and \
+                    weight_strength == position[key].get('weight_strength', 2.0):
+                print(
+                    f"'{key}' already in DB for {ticker.ticker}, passing queued data.")
+                return True
+        elif config is not None:
+            if not isinstance(position[key], list) and config == position[key].get('config', []):
+                print(
+                    f"'{key}' already in DB for {ticker.ticker}, passing queued data.")
+                return True
+        elif period is None:
+            if not isinstance(position[key], list):
+                print(
+                    f"'{key}' already in DB for {ticker.ticker}, passing queued data.")
+                return True
+        else:
+            if not isinstance(position[key], list) and period == position[key].get('period', 0):
+                print(
+                    f"'{key}' already in DB for {ticker.ticker}, passing queued data.")
+                return True
+    return False

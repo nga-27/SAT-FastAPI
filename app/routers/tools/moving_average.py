@@ -3,41 +3,17 @@ from fastapi import APIRouter
 from app.libs.utils.classes import ToolConfig
 from app.libs.utils.responses import response_handler
 
-from app.libs.tools.rsi import generate_rsi_signal
 from app.libs.tools.moving_average import (
     simple_moving_avg, exponential_moving_avg, windowed_moving_avg
 )
 
 
-LIST_OF_TOOLS = [
-    "RSI"
-]
-
 router = APIRouter(
-    prefix="/tools"
+    prefix="/tools/moving_average"
 )
 
 
-@router.get("/", tags=["Tools"])
-def echo_tools():
-    return {"tools available": LIST_OF_TOOLS}
-
-
-@router.get("/rsi/{ticker}", tags=["RSI"])
-def get_rsi(ticker: str):
-    rsi = generate_rsi_signal(ticker)
-    response = response_handler('tools', 'rsi', rsi, ticker=ticker)
-    return response
-
-
-@router.post("/rsi", tags=["RSI"])
-def post_rsi(config: ToolConfig):
-    rsi = generate_rsi_signal(config.ticker, period=config.period)
-    response = response_handler('tools', 'rsi', rsi, ticker=config.ticker)
-    return response
-
-
-@router.get("/simple_moving_average/{ticker}", tags=["Moving Averages"], description="default period is 7 days")
+@router.get("/simple/{ticker}", tags=["Moving Averages"], description="default period is 7 days", status_code=200)
 def get_simple_moving_average(ticker: str):
     sma = simple_moving_avg(ticker)
     response = response_handler(
@@ -45,7 +21,7 @@ def get_simple_moving_average(ticker: str):
     return response
 
 
-@router.post("/simple_moving_average", tags=["Moving Averages"])
+@router.post("/simple", tags=["Moving Averages"], status_code=201)
 def post_simple_moving_average(config: ToolConfig):
     sma = simple_moving_avg(config.ticker, period=config.period)
     response = response_handler(
@@ -53,23 +29,26 @@ def post_simple_moving_average(config: ToolConfig):
     return response
 
 
-@router.get("/exponential_moving_average/{ticker}", tags=["Moving Averages"], description="default period is 7 days")
-def get_simple_moving_average(ticker: str):
+@router.get("/exponential/{ticker}", tags=["Moving Averages"], description="default period is 7 days", status_code=200)
+def get_exponential_moving_average(ticker: str):
     ema = exponential_moving_avg(ticker)
     response = response_handler(
         'tools', 'exponential_moving_average', ema, ticker=ticker)
     return response
 
 
-@router.post("/exponential_moving_average", tags=["Moving Averages"])
-def post_simple_moving_average(config: ToolConfig):
+@router.post("/exponential", tags=["Moving Averages"], status_code=201)
+def post_exponential_moving_average(config: ToolConfig):
     ema = exponential_moving_avg(config.ticker, period=config.period)
     response = response_handler(
         'tools', 'exponential_moving_average', ema, ticker=config.ticker)
     return response
 
 
-@router.get("/windowed_moving_average/{ticker}", tags=["Moving Averages"], description="default period is 7 days")
+@router.get("/windowed/{ticker}",
+            tags=["Moving Averages"],
+            description="default period is 7 days",
+            status_code=200)
 def get_windowed_moving_avg(ticker: str):
     wma = windowed_moving_avg(ticker)
     response = response_handler(
@@ -77,7 +56,7 @@ def get_windowed_moving_avg(ticker: str):
     return response
 
 
-@router.post("/windowed_moving_average", tags=["Moving Averages"])
+@router.post("/windowed", tags=["Moving Averages"], status_code=201)
 def post_windowed_moving_avg(config: ToolConfig):
     wma = windowed_moving_avg(config.ticker, period=config.period,
                               weight_strength=config.weight, subFilter=config.subFilter)
