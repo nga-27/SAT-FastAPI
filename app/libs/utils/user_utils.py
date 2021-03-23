@@ -67,6 +67,18 @@ def remove_user(username: str, password):
     return {"value": f"User '{username}' not found."}, 404
 
 
+def serialize_user_secret_key(username: str, password, key: str):
+    if username in main.USER:
+        if password != "":
+            correct_password = secrets.compare_digest(
+                password, main.USER[username]['password_hash'])
+            if correct_password:
+                return main.USER[username].get(key), 200
+            return f"User '{username}' not authorized to fetch '{key}'.", 401
+        return f"User '{username}' not authorized to fetch '{key}'.", 401
+    return f"User '{username}' not found.", 404
+
+
 def update_user(user_obj):
     with open(main.USER_PATH, 'w') as usf:
         json.dump(user_obj, usf)

@@ -6,6 +6,11 @@ INDEXES = {
     "^IRX": "3MO-TBILL"
 }
 
+SP500_TO_TICKER = {
+    "S&P500": "^GSPC",
+    "SP500": "^GSPC"
+}
+
 
 def date_extractor(date, _format=None):
     """Date Extractor
@@ -32,3 +37,11 @@ def date_extractor(date, _format=None):
     else:
         dateX = date2
     return dateX
+
+
+def sp500_map_to_ticker(ticker: str):
+    return SP500_TO_TICKER.get(ticker, ticker)
+
+
+def sp500_map_to_db(ticker_name: str):
+    return INDEXES.get(ticker_name, ticker_name)
