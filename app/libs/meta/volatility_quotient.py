@@ -7,7 +7,7 @@ import numpy as np
 
 from app.libs.utils.classes import Ticker
 from app.libs.utils.db_utils import download_data, patch_db, is_already_valid_data
-from app.libs.utils.generic_utils import sp500_map_to_ticker, sp500_map_to_db
+from app.libs.utils.generic_utils import index_map_to_ticker, index_map_to_db
 
 
 VQ_API_BASE_URL = "https://sts.tradesmith.com/api/StsApiService/"
@@ -49,7 +49,7 @@ def get_volatility(ticker_str: str, vq_key: str, **kwargs) -> dict:
 
     key = vq_key
 
-    ticker_str = sp500_map_to_ticker(ticker_str)
+    ticker_str = index_map_to_ticker(ticker_str)
     if ticker_str == '^GSPC':
         ticker_str = 'SPY'
         is_SP500 = True

@@ -5,13 +5,13 @@ import datetime
 import yfinance as yf
 
 from app import main
-from app.libs.utils.generic_utils import sp500_map_to_ticker, sp500_map_to_db
+from app.libs.utils.generic_utils import index_map_to_ticker, index_map_to_db
 
 from .classes import Ticker
 
 
 def download_data(ticker: Ticker):
-    ticker_str = sp500_map_to_db(ticker.ticker.upper())
+    ticker_str = index_map_to_db(ticker.ticker.upper())
     if ticker_str in main.DB:
         content = main.DB[ticker_str]
         if content.get('date') is not None:
@@ -23,7 +23,7 @@ def download_data(ticker: Ticker):
                     f"{ticker_str} already valid in DB, passing queued data.")
                 return main.DB[ticker_str]
 
-    ticker_data_name = sp500_map_to_ticker(ticker_str)
+    ticker_data_name = index_map_to_ticker(ticker_str)
     pddata = yf.download(tickers=ticker_data_name,
                          period=ticker.period, interval=ticker.interval)
     data = {x: list(pddata[x]) for x in pddata.columns}
@@ -42,7 +42,7 @@ def update_db(db_obj):
 
 
 def patch_db(ticker: Ticker, new_key: str, new_data):
-    ticker_str = sp500_map_to_db(ticker.ticker.upper())
+    ticker_str = index_map_to_db(ticker.ticker.upper())
     main.DB[ticker_str][new_key] = new_data
     update_db(main.DB)
     return
@@ -56,7 +56,7 @@ def is_already_valid_data(ticker: Ticker, position: dict, key: str, **kwargs) ->
 
     special_case = all([period, filter_type, weight_strength])
 
-    ticker_str = sp500_map_to_db(ticker.ticker.upper())
+    ticker_str = index_map_to_db(ticker.ticker.upper())
 
     if key in position:
         if special_case:

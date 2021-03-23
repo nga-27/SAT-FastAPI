@@ -5,6 +5,7 @@ from app.libs.utils.responses import response_handler
 
 from app.libs.tools.ultimate_oscillator import ultimate_oscillator
 from app.libs.tools.rsi import RSI
+from app.libs.tools.macd import mov_avg_convergence_divergence
 
 router = APIRouter(
     prefix="/tools/oscillator"
@@ -38,4 +39,11 @@ def get_rsi(ticker: str):
 def post_rsi(config: ToolConfig):
     rsi = RSI(config.ticker, period=config.period)
     response = response_handler('tools', 'rsi', rsi, ticker=config.ticker)
+    return response
+
+
+@router.get("/macd/{ticker}", tags=["Oscillators"], status_code=200)
+def get_macd(ticker: str):
+    macd = mov_avg_convergence_divergence(ticker)
+    response = response_handler('tools', 'macd', macd, ticker=ticker)
     return response

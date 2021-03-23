@@ -40,7 +40,7 @@ def RSI(ticker: str, **kwargs) -> dict:
 
     period = kwargs.get('period', 14)
 
-    if period is None:
+    if period is None or period == 0:
         period = 14
     ticker = Ticker(ticker=ticker)
 

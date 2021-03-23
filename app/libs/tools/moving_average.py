@@ -20,7 +20,7 @@ def simple_moving_avg(ticker: str, **kwargs) -> list:
     """
     period = kwargs.get('period', 7)
 
-    if period is None:
+    if period is None or period == 0:
         period = 7
     ticker = Ticker(ticker=ticker)
 
@@ -94,7 +94,7 @@ def exponential_moving_avg(ticker: str, **kwargs) -> list:
     """
     period = kwargs.get('period', 7)
 
-    if period is None:
+    if period is None or period == 0:
         period = 7
     ticker = Ticker(ticker=ticker)
 
@@ -174,7 +174,7 @@ def windowed_moving_avg(ticker: str, **kwargs) -> list:
     """
     period = kwargs.get('period', 7)
 
-    if period is None:
+    if period is None or period == 0:
         period = 7
     ticker = Ticker(ticker=ticker)
 

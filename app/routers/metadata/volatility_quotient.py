@@ -19,7 +19,10 @@ def get_volatility_quotient(ticker: str, credentials: HTTPBasicCredentials = Dep
     vq_key, code = serialize_user_secret_key(
         credentials.username, credentials.password, 'vq_key')
     if code != 200:
-        HTTPException(status_code=code, detail=value)
+        raise HTTPException(status_code=code, detail=vq_key)
+    if vq_key == "":
+        raise HTTPException(
+            status_code=404, detail="'vq_key' not found for user.")
     vq_data = get_volatility(ticker, vq_key)
     response = response_handler(
         'metadata', 'volatility', vq_data, ticker=ticker)
