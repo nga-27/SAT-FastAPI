@@ -7,7 +7,8 @@ LIST_OF_TOOLS = [
     "exponential_moving_average",
     "windowed_moving_average",
     "on_balance_volume",
-    "ultimate_oscillator"
+    "ultimate_oscillator",
+    "moving_average_convergence_divergence"
 ]
 
 router = APIRouter(

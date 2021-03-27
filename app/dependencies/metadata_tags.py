@@ -21,5 +21,9 @@ tags_metadata = [
     {
         "name": "On Balance Volume",
         "description": "Volume and price action over time."
+    },
+    {
+        "name": "Metadata",
+        "description": "Metadata / API-driven content."
     }
 ]

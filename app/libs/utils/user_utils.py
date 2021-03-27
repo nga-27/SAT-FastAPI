@@ -1,6 +1,7 @@
 import os
 import json
 import datetime
+import secrets
 
 from app import main
 
@@ -18,10 +19,19 @@ def serialize_users():
 
 def serialize_user(username: str):
     obj = {}
-    if user.username in main.USER:
+    if username in main.USER:
         obj = User(username=username,
-                   name=main.USER[username], uuid=main.USER[uuid])
+                   name=main.USER[username]['name'],
+                   uuid=main.USER[username]['uuid'],
+                   vq_key="<hidden>",
+                   password_hash="<hidden>")
     return obj, 200
+
+
+def check_user(username: str):
+    if username in main.USER:
+        return True
+    return False
 
 
 def add_user(user: User):
@@ -39,13 +49,34 @@ def add_user(user: User):
     return {"value": f"User '{user.username}' added."}, 201
 
 
-def remove_user(username: str):
+def remove_user(username: str, password):
     if username in main.USER:
-        # May have to have permission control here later...
-        main.USER.pop(username)
-        update_user(main.USER)
-        return {"value": f"User '{username}' deleted."}, 200
+        user_obj = main.USER[username]
+        if user_obj['password_hash'] != '':
+            correct_password = secrets.compare_digest(
+                password, user_obj['password_hash'])
+            if correct_password:
+                main.USER.pop(username)
+                update_user(main.USER)
+                return {"value": f"User '{username}' deleted."}, 200
+        else:
+            main.USER.pop(username)
+            update_user(main.USER)
+            return {"value": f"User '{username}' deleted."}, 200
+        return {"value": f"User '{username}' is unauthorized"}, 401
     return {"value": f"User '{username}' not found."}, 404
+
+
+def serialize_user_secret_key(username: str, password, key: str):
+    if username in main.USER:
+        if password != "":
+            correct_password = secrets.compare_digest(
+                password, main.USER[username]['password_hash'])
+            if correct_password:
+                return main.USER[username].get(key), 200
+            return f"User '{username}' not authorized to fetch '{key}'.", 401
+        return f"User '{username}' not authorized to fetch '{key}'.", 401
+    return f"User '{username}' not found.", 404
 
 
 def update_user(user_obj):
